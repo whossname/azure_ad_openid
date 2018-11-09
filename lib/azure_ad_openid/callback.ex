@@ -37,8 +37,7 @@ defmodule AzureADOpenId.Callback do
     # decode
     |> Base.url_decode64(padding: false)
     |> Enforce.ok!(error)
-    |> JSON.decode
-    |> Enforce.ok!(error)
+    |> Jason.decode!
     # get x5t
     |> Map.get("x5t")
   end
@@ -53,16 +52,14 @@ defmodule AzureADOpenId.Callback do
   defp jwks_uri! do
     "https://login.microsoftonline.com/common/.well-known/openid-configuration"
     |> http_request!
-    |> JSON.decode
-    |> Enforce.ok!("Failed to retrieve jwks uri - invalid response")
+    |> Jason.decode!
     |> Map.get("jwks_uri")
   end
 
   defp get_discovery_keys!(url, x5t)do
     url
     |> http_request!
-    |> JSON.decode
-    |> Enforce.ok!("Failed to retrieve discovery keys - invalid response")
+    |> Jason.decode!
     |> Map.get("keys")
     |> Enum.filter(fn(key) -> key["x5t"] === x5t end)
     |> List.first

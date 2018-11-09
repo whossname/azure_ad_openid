@@ -14,12 +14,7 @@ defmodule VerifyTest do
     tenant: @tenant]
 
   setup_with_mocks [
-    {NonceStore, [:passthrough],
-      [check_nonce:
-       fn nonce ->
-         nonce == @nonce
-       end
-      ]}
+    {NonceStore, [:passthrough], [check_nonce: fn nonce -> nonce == @nonce end ]}
   ] do
     :ok
   end
