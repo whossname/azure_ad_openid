@@ -35,12 +35,30 @@ defmodule AzureADOpenId do
     end
   end
 
-  def logout_url(), do: logout_url(get_config())
+  def logout_url() do
+    logout_url(get_config(), nil)
+  end
+
+  def logout_url(redirect_uri) when is_binary(redirect_uri) do
+    logout_url(get_config(), redirect_uri)
+  end
 
   def logout_url(config) do
+    logout_url(config, nil)
+  end
+
+  def logout_url(config, redirect_uri) do
     tenant = config[:tenant]
     client_id = config[:client_id]
-    "https://login.microsoftonline.com/#{tenant}/oauth2/logout?client_id=#{client_id}"
+
+    url = "https://login.microsoftonline.com/#{tenant}/oauth2/logout?client_id=#{client_id}"
+
+    if is_binary(redirect_uri) do
+      redirect_uri = URI.encode_www_form(redirect_uri)
+      url <> "?post_logout_redirect_uri=" <> redirect_uri
+    else
+      url
+    end
   end
 
   def configured?() do 
