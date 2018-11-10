@@ -32,7 +32,7 @@ On top of this the library includes client side validations for the following cl
 - exp
 - nonce
 
-Nonces are stored using the Agent AzureADOpenId.NonceStore.
+Nonces are stored using an `Agent` called `AzureADOpenId.NonceStore`.
 
 ## Installation
 
@@ -108,13 +108,13 @@ end
 
 ## Documentation
 
-The docs can be found at [https://hexdocs.pm/azure_ad_openid ](https://hexdocs.pm/azure_ad_openid).
+The docs can be found at [https://hexdocs.pm/azure_ad_openid ](https://hexdocs.pm/azure_ad_openid/readme.html).
 
 ## Credit
 
 The following repository was used as a base for the AzureAD authentication:
 
-https://github.com/onurkucukkece/oauth_azure_activedirectory
+[https://github.com/onurkucukkece/oauth_azure_activedirectory ](https://github.com/onurkucukkece/oauth_azure_activedirectory)
 
 ## License
 
