@@ -49,6 +49,19 @@ end
 
 ## Basic Usage
 
+In order to use this library you will need to first start the NonceStore which is an Agent. It is a good idea to add it as a child to a supervisor. For example in a Phoenix app:
+
+    ```elixir
+    def start(_type, _args) do
+      children = [
+        AzureADOpenId.NonceStore,
+        MyAppWeb.Endpoint,
+      ]
+      opts = [strategy: :one_for_one, name: MyApp.Supervisor]
+      Supervisor.start_link(children, opts)
+    end
+    ```
+
 This library can be used with or without the standard Elixir configuration. If you want to use it with configuration set the following in your config files:
 
     ```elixir
@@ -65,7 +78,33 @@ If you don't setup the config, you will need to pass these values in manually at
     ```
 
 The following is a simple example of a Phoenix authentication controller that uses this library:
+
     ```elixir
+    defmodule MyAppWeb.AuthController do
+      use MyAppWeb, :controller
+
+      alias AzureADOpenId
+
+      def login(conn, _) do
+        base_uri = Application.get_env(:dispatch_server, :base_uri)
+        redirect_uri = "#{base_uri}/auth/callback"
+        redirect conn, external: AzureADOpenId.authorize_url!(redirect_uri)
+      end
+
+      def callback(conn, _) do
+        {:ok, claims} = AzureADOpenId.handle_callback!(conn)
+
+        conn
+        |> put_session(:user_claims, claims)
+        |> redirect(to: "/")
+      end
+
+      def logout(conn, _) do
+        conn
+        |> put_session(:user_claims, nil)
+        |> redirect(external: AzureADOpenId.logout_url())
+      end
+    end
     ```
 
 ## Documentation?
