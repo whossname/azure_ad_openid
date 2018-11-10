@@ -2,6 +2,11 @@ defmodule AzureAdOpenIdTest do
   use ExUnit.Case
   alias AzureADOpenId.NonceStore
 
+  setup do
+    {:ok, nonce_store} = NonceStore.start_link([])
+    %{nonce_store: nonce_store}
+  end
+
   test "build logout url" do
     config = [tenant: "tenant", client_id: "client_id"]
     actual = AzureADOpenId.logout_url(config)

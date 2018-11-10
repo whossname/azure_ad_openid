@@ -2,21 +2,17 @@ defmodule AzureADOpenId.NonceStore do
   @moduledoc """
   Creates, stores and checks nonces. A created nonce will be deleted after it's timeout elapses.
   """
+  use Agent
+  @agent_name __MODULE__
 
-  @table :azure_ad_openid_nonce_store_table
+  def start_link(_) do
+    Agent.start_link(fn -> MapSet.new end, name: @agent_name)
+  end
 
-  require Logger
   def create_nonce(timeout) do
-    init_table()
-
     # create nonce
     nonce = SecureRandom.uuid
-
-    :ets.insert(@table, {nonce})
-
-    :ets.whereis(:azure_ad_openid_nonce_store_table)
-    |> inspect
-    |> Logger.info
+    Agent.update(@agent_name, &MapSet.put(&1, nonce))
 
     # set cleanup task
     if(timeout != :infinity) do
@@ -27,40 +23,17 @@ defmodule AzureADOpenId.NonceStore do
   end
 
   def check_nonce(nonce) do
-    :ets.whereis(:azure_ad_openid_nonce_store_table)
-    |> inspect
-    |> Logger.info
-
-    init_table()
-
-    :ets.whereis(:azure_ad_openid_nonce_store_table)
-    |> inspect
-    |> Logger.info
-
-    nonce_list = :ets.take(@table, nonce)
-
-    "nonce_list" |> Logger.info
-    nonce_list
-    |> inspect
-    |> Logger.info
-
-    case nonce_list do
-      [{^nonce}] -> true
-      _ -> false
-    end
-  end
-
-  defp init_table do
-    tid = :ets.whereis(@table)
-
-    case tid do
-      :undefined -> :ets.new(@table, [:public, :named_table])
-      tid -> tid
-    end
+    deleted = Agent.get(@agent_name, &MapSet.member?(&1, nonce))
+    delete_nonce(nonce)
+    deleted
   end
 
   defp cleanup(nonce, timeout) do
     Process.sleep(timeout)
-    :ets.delete(@table, nonce)
+    delete_nonce(nonce)
+  end
+
+  defp delete_nonce(nonce) do
+    Agent.update(@agent_name, &MapSet.delete(&1, nonce))
   end
 end
