@@ -40,6 +40,7 @@ defmodule AzureADOpenId.VerifyClaims do
     claims
   end
 
+  require Logger
   defp validate_claims!(claims, expected_aud, expected_tid, iat_timeout \\ @iat_timeout) do
     now = System.system_time(:second)
     expected_iss = "https://sts.windows.net/#{expected_tid}/" 
