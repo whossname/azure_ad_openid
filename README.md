@@ -32,7 +32,7 @@ On top of this the library includes client side validations for the following cl
 - exp
 - nonce
 
-Nonces are stored in ets with the NonceStore module as the key.
+Nonces are stored using the Agent AzureADOpenId.NonceStore.
 
 ## Installation
 
@@ -111,5 +111,15 @@ end
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/azure_ad_openid](https://hexdocs.pm/azure_ad_openid).
+be found at [https://hexdocs.pm/azure_ad_openid ](https://hexdocs.pm/azure_ad_openid).
+
+## Credit
+
+This repository was used as a base for the AzureAD authentication.
+
+https://github.com/onurkucukkece/oauth_azure_activedirectory
+
+## License
+
+Please see [LICENSE](https://github.com/whossname/azure_ad_openid/blob/master/LICENSE.md) for licensing details.
 
