@@ -17,7 +17,10 @@ defmodule AzureAdOpenid.MixProject do
       homepage_url: @url,
       package: package(),
       deps: deps(),
-      docs: docs()
+      docs: docs(),
+
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
     ]
   end
 
@@ -57,6 +60,7 @@ defmodule AzureAdOpenid.MixProject do
       # tools
       {:mock, "~> 0.3.0", only: :test},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end

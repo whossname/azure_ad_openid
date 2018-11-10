@@ -5,6 +5,7 @@ defmodule NonceStoreTest do
   test "create and check nonce" do
     nonce = NonceStore.create_nonce(15000)
     assert NonceStore.check_nonce(nonce)
+    assert !NonceStore.check_nonce(nonce)
   end
 
   test "check nonce that doesn't exist" do
@@ -21,5 +22,6 @@ defmodule NonceStoreTest do
   test "handle infinite timeout" do
     nonce = NonceStore.create_nonce(:infinity)
     assert NonceStore.check_nonce(nonce)
+    assert !NonceStore.check_nonce(nonce)
   end
 end

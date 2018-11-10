@@ -1,8 +1,9 @@
 defmodule AzureAdOpenIdTest do
   use ExUnit.Case
+  alias AzureADOpenId.NonceStore
 
   test "build logout url" do
-    actual = AzureAdOpenId.logout_url("tenant", "client_id")
+    actual = AzureADOpenId.logout_url("tenant", "client_id")
     expected = "https://login.microsoftonline.com/tenant/oauth2/logout?client_id=client_id"
     assert actual == expected
   end
@@ -15,7 +16,7 @@ defmodule AzureAdOpenIdTest do
     ]
     "https://login.microsoftonline.com/tenant/oauth2/authorize?client_id=client_id&nonce="
     <> rest
-    = AzureAdOpenId.authorize_url!(redirect_uri, config)
+    = AzureADOpenId.authorize_url!(redirect_uri, config)
 
     <<nonce :: binary-size(36)>> <>
       "&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fcallback&response_mode=form_post" <>
@@ -29,5 +30,8 @@ defmodule AzureAdOpenIdTest do
 
     [a, b, c, d, e]
     |> Enum.map(&String.to_integer(&1, 16))
+
+    assert NonceStore.check_nonce(nonce)
+    assert !NonceStore.check_nonce(nonce)
   end
 end

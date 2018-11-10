@@ -1,4 +1,4 @@
-defmodule AzureAdOpenId do
+defmodule AzureADOpenId do
   @moduledoc """
   Documentation for AzureAdOpenid.
   """
