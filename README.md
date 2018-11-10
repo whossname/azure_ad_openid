@@ -86,7 +86,7 @@ defmodule MyAppWeb.AuthController do
   alias AzureADOpenId
 
   def login(conn, _) do
-    base_uri = Application.get_env(:dispatch_server, :base_uri)
+    base_uri = Application.get_env(:my_app, :base_uri)
     redirect_uri = "#{base_uri}/auth/callback"
     redirect conn, external: AzureADOpenId.authorize_url!(redirect_uri)
   end
