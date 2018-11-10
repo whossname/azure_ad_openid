@@ -71,4 +71,51 @@ defmodule AzureADOpenId do
   defp get_config() do
     Application.get_env(:azure_ad_openid, AzureADOpenId)
   end
+
+  def get_user_name(token) do
+    cond do
+      token[:family_name] && token[:given_name] ->
+        name = token[:given_name] <> " " <> token[:family_name] 
+        format_name(name)
+      token[:upn] -> format_name(token[:upn])
+      token[:name] -> format_name(token[:name])
+      token[:email] -> format_name(token[:email])
+      true -> "No Name"
+    end
+  end
+
+  defp format_name(name) do
+    if should_format(name) do
+      name
+        |> String.split(["@", "_"])
+        |> hd
+        |> String.split([".", " "])
+        |> Enum.map(&capitalize/1)
+        |> Enum.join(" ")
+    else
+      name
+    end
+  end
+
+  defp capitalize(name) do
+    if has_upper?(name) do
+      name
+    else
+      String.capitalize(name)
+    end
+  end
+
+  @valid_upper String.graphemes("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  defp has_upper?(name), do: String.contains?(name, @valid_upper)
+
+  defp should_format(name) do
+    cond do
+      String.contains?(name, [".", "@", "_"]) ->
+        true
+      has_upper?(name) ->
+        false
+      true ->
+        true
+    end
+  end
 end
