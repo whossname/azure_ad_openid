@@ -3,7 +3,8 @@ defmodule AzureAdOpenIdTest do
   alias AzureADOpenId.NonceStore
 
   test "build logout url" do
-    actual = AzureADOpenId.logout_url("tenant", "client_id")
+    config = [tenant: "tenant", client_id: "client_id"]
+    actual = AzureADOpenId.logout_url(config)
     expected = "https://login.microsoftonline.com/tenant/oauth2/logout?client_id=client_id"
     assert actual == expected
   end

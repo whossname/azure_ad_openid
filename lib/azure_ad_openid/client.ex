@@ -6,6 +6,7 @@ defmodule AzureADOpenId.Client do
   alias OAuth2.Client
   alias OAuth2.Strategy.AuthCode
   alias AzureADOpenId.NonceStore
+
   @timeout 15 * 60 * 1000 # 15 minutes
 
   def authorize_url!(callback_url, config) do
@@ -25,12 +26,14 @@ defmodule AzureADOpenId.Client do
   end
 
   defp build_client(callback_url, config) do
+    azure_base_url = "https://login.microsoftonline.com/#{config[:tenant]}/oauth2"
+
     Client.new([
       strategy: __MODULE__,
       client_id: config[:client_id],
       redirect_uri: callback_url,
-      authorize_url: "https://login.microsoftonline.com/#{config[:tenant]}/oauth2/authorize",
-      token_url: "https://login.microsoftonline.com/#{config[:tenant]}/oauth2/token"
+      authorize_url: "#{azure_base_url}/authorize",
+      token_url: "#{azure_base_url}/token"
     ])
   end
 end

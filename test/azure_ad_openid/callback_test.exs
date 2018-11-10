@@ -14,6 +14,7 @@ defmodule CallbackTest do
     :ok
   end
 
+  @tag :requires_secret_config
   test "callback" do
     config = Application.get_env(:azure_ad_openid, AzureADOpenId)
 

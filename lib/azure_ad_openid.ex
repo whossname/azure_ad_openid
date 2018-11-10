@@ -6,13 +6,11 @@ defmodule AzureADOpenId do
   alias AzureADOpenId.Client
   alias AzureADOpenId.Callback
 
-  def authorize_url!(redirect_uri) do
-    authorize_url!(redirect_uri, get_config())
-  end
+  def authorize_url!(redirect_uri),
+    do: authorize_url!(redirect_uri, get_config())
 
-  def authorize_url!(redirect_uri, config) do
-    Client.authorize_url!(redirect_uri, config)
-  end
+  def authorize_url!(redirect_uri, config),
+    do: Client.authorize_url!(redirect_uri, config)
 
   def handle_callback!(conn), do: handle_callback!(conn, get_config())
 
@@ -37,14 +35,11 @@ defmodule AzureADOpenId do
     end
   end
 
-  def logout_url() do
-    configset = get_config()
-    tenant = configset[:tenant]
-    client_id = configset[:client_id]
-    logout_url(tenant, client_id)
-  end
+  def logout_url(), do: logout_url(get_config())
 
-  def logout_url(tenant, client_id) do
+  def logout_url(config) do
+    tenant = config[:tenant]
+    client_id = config[:client_id]
     "https://login.microsoftonline.com/#{tenant}/oauth2/logout?client_id=#{client_id}"
   end
 
