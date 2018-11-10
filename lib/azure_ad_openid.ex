@@ -1,6 +1,6 @@
 defmodule AzureADOpenId do
   @moduledoc """
-  Documentation for AzureAdOpenid.
+
   """
 
   alias AzureADOpenId.Client

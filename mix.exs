@@ -1,6 +1,6 @@
 defmodule AzureAdOpenid.MixProject do
   use Mix.Project
-  @version "0.0.0"
+  @version "0.1.0"
   @url "https://github.com/whossname/azure_ad_openid"
   @maintainers ["Tyson Buzza"]
 

@@ -36,8 +36,7 @@ Nonces are stored using the Agent AzureADOpenId.NonceStore.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `azure_ad_openid` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `azure_ad_openid` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -49,7 +48,7 @@ end
 
 ## Basic Usage
 
-In order to use this library you will need to first start the NonceStore which is an Agent. It is a good idea to add it as a child to a supervisor. For example in a Phoenix app:
+In order to use this library you will need to first start the `AzureADOpenId.NonceStore`. It is a good idea to add it as a child to a supervisor. For example in a Phoenix app:
 
 ```elixir
 def start(_type, _args) do
@@ -107,15 +106,13 @@ defmodule MyAppWeb.AuthController do
 end
 ```
 
-## Documentation?
+## Documentation
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/azure_ad_openid ](https://hexdocs.pm/azure_ad_openid).
+The docs can be found at [https://hexdocs.pm/azure_ad_openid ](https://hexdocs.pm/azure_ad_openid).
 
 ## Credit
 
-This repository was used as a base for the AzureAD authentication.
+The following repository was used as a base for the AzureAD authentication:
 
 https://github.com/onurkucukkece/oauth_azure_activedirectory
 
