@@ -8,7 +8,7 @@ defmodule AzureADOpenId do
 
   @type uri :: String.t
   @type config_values :: {:tenant, String.t} | {:client_id, String.t}
-  @type config :: [config_values]
+  @type config :: nil | [config_values]
   @type id_token :: map()
   @type callback_response :: {:ok, id_token} | {:error, String.t, String.t}
   @type conn :: map() # Plug.Conn.t
@@ -16,23 +16,20 @@ defmodule AzureADOpenId do
   @doc """
   Get a redirect url for authorization using Azure Active Directory login.
   """
-  @spec authorize_url!(uri) :: uri
-  def authorize_url!(redirect_uri),
-    do: authorize_url!(redirect_uri, get_config())
-
   @spec authorize_url!(uri, config) :: uri
-  def authorize_url!(redirect_uri, config),
-    do: Client.authorize_url!(redirect_uri, config)
+  def authorize_url!(redirect_uri, config \\ nil) do
+    config = config || get_config()
+    Client.authorize_url!(redirect_uri, config)
+  end
 
   @doc """
-  Handles and validates the t:id_token in the callback response. The t:redirect_uri used in the 
+  Handles and validates the `t:id_token/0` in the callback response. The redirect_uri used in the 
   `authorize_url!/1` function should redirect to a path that uses this funtion.
   """
-  @spec handle_callback!(conn) :: callback_response
-  def handle_callback!(conn), do: handle_callback!(conn, get_config())
-
   @spec handle_callback!(conn, config) :: callback_response
-  def handle_callback!(conn, config) do
+  def handle_callback!(conn, config \\ nil) do
+    config = config || get_config()
+
     case Map.get(conn, :params) do
       %{"id_token" => id_token, "code" => code} ->
         get_claims(id_token, code, config)
@@ -56,23 +53,18 @@ defmodule AzureADOpenId do
   @doc """
   Returns the redirect url for logging out of Azure Active Directory.
   """
-  @spec logout_url() :: uri
-  def logout_url() do
-    logout_url(get_config(), nil)
-  end
-
   @spec logout_url(uri) :: uri
   def logout_url(redirect_uri) when is_binary(redirect_uri) do
     logout_url(get_config(), redirect_uri)
   end
 
-  @spec logout_url(config) :: uri
-  def logout_url(config) do
-    logout_url(config, nil)
-  end
-
+  @doc """
+  Returns the redirect url for logging out of Azure Active Directory.
+  """
   @spec logout_url(config, uri | nil) :: uri
-  def logout_url(config, redirect_uri) do
+  def logout_url(config \\ nil, redirect_uri \\ nil) do
+    config = config || get_config()
+
     tenant = config[:tenant]
     client_id = config[:client_id]
 
@@ -88,7 +80,7 @@ defmodule AzureADOpenId do
 
   @doc """
   Checks if the library is configured with the standard Elixir configuration (i.e. using
-  the congig files). 
+  the config files). 
   """
   @spec configured?() :: boolean()
   def configured?() do 
@@ -103,8 +95,8 @@ defmodule AzureADOpenId do
   end
 
   @doc """
-  Returns a human readable user name from an t:id_token. This is useful as the 
-  Azure Active Directory t:id_token can be very inconsistent in how user names are stored.
+  Returns a human readable user name from an `t:id_token/0`. This is useful as the 
+  Azure Active Directory `t:id_token/0` can be very inconsistent in how user names are stored.
   """
   @spec get_user_name(id_token) :: String.t
   def get_user_name(token) do

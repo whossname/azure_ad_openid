@@ -1,6 +1,6 @@
 defmodule AzureADOpenId.NonceStore do
   @moduledoc """
-  Creates, stores and checks nonces. A created nonce will be deleted after it's timeout elapses.
+  Creates, stores and checks nonces. A created nonce will be deleted after its timeout elapses.
   """
   use Agent
   @agent_name __MODULE__
