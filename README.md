@@ -41,7 +41,7 @@ The package can be installed by adding `azure_ad_openid` to your list of depende
 ```elixir
 def deps do
   [
-    {:azure_ad_openid, "~> 0.1.0"},
+    {:azure_ad_openid, "~> 0.1"},
   ]
 end
 ```

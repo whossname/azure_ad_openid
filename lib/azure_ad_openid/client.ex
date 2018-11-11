@@ -9,12 +9,13 @@ defmodule AzureADOpenId.Client do
 
   @timeout 15 * 60 * 1000 # 15 minutes
 
+  @spec authorize_url!(String.t, Keyword.t) :: String.t
   def authorize_url!(callback_url, config) do
-    params = %{
-        response_mode: "form_post",
-        response_type: "code id_token",
-        nonce: NonceStore.create_nonce(@timeout)
-      }
+    params = [ 
+      response_mode: "form_post",
+      response_type: "code id_token",
+      nonce: NonceStore.create_nonce(@timeout)
+    ]
 
     callback_url
     |> build_client(config)

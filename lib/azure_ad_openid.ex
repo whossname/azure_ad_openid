@@ -10,7 +10,8 @@ defmodule AzureADOpenId do
   @type config_values :: {:tenant, String.t} | {:client_id, String.t}
   @type config :: [config_values]
   @type id_token :: map()
-  @type callback_response :: {:ok, id_token} | {:error, String.t}
+  @type callback_response :: {:ok, id_token} | {:error, String.t, String.t}
+  @type conn :: map() # Plug.Conn.t
 
   @doc """
   Get a redirect url for authorization using Azure Active Directory login.
@@ -27,10 +28,10 @@ defmodule AzureADOpenId do
   Handles and validates the t:id_token in the callback response. The t:redirect_uri used in the 
   `authorize_url!/1` function should redirect to a path that uses this funtion.
   """
-  @spec handle_callback!(Plug.Conn.t) :: callback_response
+  @spec handle_callback!(conn) :: callback_response
   def handle_callback!(conn), do: handle_callback!(conn, get_config())
 
-  @spec handle_callback!(Plug.Conn.t, config) :: callback_response
+  @spec handle_callback!(conn, config) :: callback_response
   def handle_callback!(conn, config) do
     case Map.get(conn, :params) do
       %{"id_token" => id_token, "code" => code} ->
@@ -70,7 +71,7 @@ defmodule AzureADOpenId do
     logout_url(config, nil)
   end
 
-  @spec logout_url(config, uri) :: uri
+  @spec logout_url(config, uri | nil) :: uri
   def logout_url(config, redirect_uri) do
     tenant = config[:tenant]
     client_id = config[:client_id]

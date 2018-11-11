@@ -1,6 +1,6 @@
 defmodule AzureAdOpenid.MixProject do
   use Mix.Project
-  @version "0.1.0"
+  @version "0.1.1"
   @url "https://github.com/whossname/azure_ad_openid"
   @maintainers ["Tyson Buzza"]
 
@@ -20,7 +20,12 @@ defmodule AzureAdOpenid.MixProject do
       docs: docs(),
 
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+      ]
     ]
   end
 
