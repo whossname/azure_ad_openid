@@ -61,7 +61,8 @@ defmodule AzureAdOpenid.MixProject do
       {:mock, "~> 0.3.0", only: :test},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
     ]
   end
 end

@@ -1,19 +1,36 @@
 defmodule AzureADOpenId do
   @moduledoc """
-
+  Azure Active Directory authentication using OpenID.
   """
 
   alias AzureADOpenId.Client
   alias AzureADOpenId.Callback
 
+  @type uri :: String.t
+  @type config_values :: {:tenant, String.t} | {:client_id, String.t}
+  @type config :: [config_values]
+  @type id_token :: map()
+  @type callback_response :: {:ok, id_token} | {:error, String.t}
+
+  @doc """
+  Get a redirect url for authorization using Azure Active Directory login.
+  """
+  @spec authorize_url!(uri) :: uri
   def authorize_url!(redirect_uri),
     do: authorize_url!(redirect_uri, get_config())
 
+  @spec authorize_url!(uri, config) :: uri
   def authorize_url!(redirect_uri, config),
     do: Client.authorize_url!(redirect_uri, config)
 
+  @doc """
+  Handles and validates the t:id_token in the callback response. The t:redirect_uri used in the 
+  `authorize_url!/1` function should redirect to a path that uses this funtion.
+  """
+  @spec handle_callback!(Plug.Conn.t) :: callback_response
   def handle_callback!(conn), do: handle_callback!(conn, get_config())
 
+  @spec handle_callback!(Plug.Conn.t, config) :: callback_response
   def handle_callback!(conn, config) do
     case Map.get(conn, :params) do
       %{"id_token" => id_token, "code" => code} ->
@@ -35,18 +52,25 @@ defmodule AzureADOpenId do
     end
   end
 
+  @doc """
+  Returns the redirect url for logging out of Azure Active Directory.
+  """
+  @spec logout_url() :: uri
   def logout_url() do
     logout_url(get_config(), nil)
   end
 
+  @spec logout_url(uri) :: uri
   def logout_url(redirect_uri) when is_binary(redirect_uri) do
     logout_url(get_config(), redirect_uri)
   end
 
+  @spec logout_url(config) :: uri
   def logout_url(config) do
     logout_url(config, nil)
   end
 
+  @spec logout_url(config, uri) :: uri
   def logout_url(config, redirect_uri) do
     tenant = config[:tenant]
     client_id = config[:client_id]
@@ -61,6 +85,11 @@ defmodule AzureADOpenId do
     end
   end
 
+  @doc """
+  Checks if the library is configured with the standard Elixir configuration (i.e. using
+  the congig files). 
+  """
+  @spec configured?() :: boolean()
   def configured?() do 
     configset = get_config() 
     configset != nil
@@ -72,6 +101,11 @@ defmodule AzureADOpenId do
     Application.get_env(:azure_ad_openid, AzureADOpenId)
   end
 
+  @doc """
+  Returns a human readable user name from an t:id_token. This is useful as the 
+  Azure Active Directory t:id_token can be very inconsistent in how user names are stored.
+  """
+  @spec get_user_name(id_token) :: String.t
   def get_user_name(token) do
     cond do
       token[:family_name] && token[:given_name] ->
