@@ -5,36 +5,24 @@ defmodule AzureADOpenId.Client.ClientCredentials do
 
   alias OAuth2.Client
   alias OAuth2.Strategy
-  alias AzureADOpenId.NonceStore
 
-  @timeout 15 * 60 * 1000 # 15 minutes
+  def get_token!(config) do
+    resp =
+    config
+    |> build_client()
+    |> OAuth2.Client.get_token!()
 
-  @spec authorize_url!(String.t, Keyword.t) :: String.t
-  def authorize_url!(callback_url, config) do
-    params = [
-      response_mode: "form_post",
-      response_type: "code id_token",
-      nonce: NonceStore.create_nonce(@timeout)
-    ]
-
-    callback_url
-    |> build_client(config)
-    |> Client.authorize_url!(params)
+    resp.token.access_token
   end
 
-  def authorize_url(client, params) do
-    Strategy.ClientCredentials.authorize_url(client, params)
-  end
-
-  defp build_client(callback_url, config) do
+  defp build_client(config) do
     azure_base_url = "https://login.microsoftonline.com/#{config[:tenant]}/oauth2"
 
-    Client.new([
-      strategy: __MODULE__,
+    Client.new(
+      strategy: Strategy.ClientCredentials,
       client_id: config[:client_id],
-      redirect_uri: callback_url,
-      authorize_url: "#{azure_base_url}/authorize",
+      client_secret: config[:client_secret],
       token_url: "#{azure_base_url}/token"
-    ])
+    )
   end
 end

@@ -27,6 +27,22 @@ defmodule AzureADOpenId.Callback do
     |> VerifyClaims.verify!(code, config)
   end
 
+  def validate_access_token(access_token) do
+    public_key =
+      access_token
+      |> get_x5t_from_token!
+      |> get_public_key()
+
+    opts = %{
+      alg: "RS256",
+      key: public_key
+    }
+
+    access_token
+    |> JsonWebToken.verify(opts)
+    |> Enforce.ok!("JWT verification failed")
+  end
+
   defp get_x5t_from_token!(id_token) do
     error = "Failed to get x5t from token - invalid response"
 
@@ -60,7 +76,6 @@ defmodule AzureADOpenId.Callback do
     url
     |> http_request!
     |> Jason.decode!
-    |> IO.inspect()
     |> Map.get("keys")
     |> Enum.filter(fn(key) -> key["x5t"] === x5t end)
     |> List.first
