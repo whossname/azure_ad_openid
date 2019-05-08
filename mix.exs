@@ -8,7 +8,7 @@ defmodule AzureAdOpenid.MixProject do
     [
       app: :azure_ad_openid,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       name: "Azure Active Directory OpenID",
@@ -63,7 +63,7 @@ defmodule AzureAdOpenid.MixProject do
       {:httpoison, "~> 1.2"},
 
       # tools
-      {:mock, "~> 0.3.0", only: :test},
+      {:mock, "~> 0.3.3", only: :test},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev},

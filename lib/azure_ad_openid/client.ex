@@ -4,14 +4,14 @@ defmodule AzureADOpenId.Client do
   """
 
   alias OAuth2.Client
-  alias OAuth2.Strategy.AuthCode
+  alias OAuth2.Strategy
   alias AzureADOpenId.NonceStore
 
   @timeout 15 * 60 * 1000 # 15 minutes
 
   @spec authorize_url!(String.t, Keyword.t) :: String.t
   def authorize_url!(callback_url, config) do
-    params = [ 
+    params = [
       response_mode: "form_post",
       response_type: "code id_token",
       nonce: NonceStore.create_nonce(@timeout)
@@ -23,7 +23,7 @@ defmodule AzureADOpenId.Client do
   end
 
   def authorize_url(client, params) do
-    AuthCode.authorize_url(client, params)
+    Strategy.AuthCode.authorize_url(client, params)
   end
 
   defp build_client(callback_url, config) do

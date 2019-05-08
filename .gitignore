@@ -24,3 +24,4 @@ azure_ad_openid-*.tar
 
 
 config/test\.secret\.exs
+.elixir_ls
