@@ -19,11 +19,11 @@ defmodule AzureADOpenId do
   @spec authorize_url!(uri, config) :: uri
   def authorize_url!(redirect_uri, config \\ nil) do
     config = config || get_config()
-    Client.authorize_url!(redirect_uri, config)
+    Client.AuthCode.authorize_url!(redirect_uri, config)
   end
 
   @doc """
-  Handles and validates the `t:id_token/0` in the callback response. The redirect_uri used in the 
+  Handles and validates the `t:id_token/0` in the callback response. The redirect_uri used in the
   `authorize_url!/1` function should redirect to a path that uses this funtion.
   """
   @spec handle_callback!(conn, config) :: callback_response
@@ -80,29 +80,29 @@ defmodule AzureADOpenId do
 
   @doc """
   Checks if the library is configured with the standard Elixir configuration (i.e. using
-  the config files). 
+  the config files).
   """
   @spec configured?() :: boolean()
-  def configured?() do 
-    configset = get_config() 
+  def configured?() do
+    configset = get_config()
     configset != nil
-    && Keyword.has_key?(configset, :tenant) 
-    && Keyword.has_key?(configset, :client_id) 
-  end 
+    && Keyword.has_key?(configset, :tenant)
+    && Keyword.has_key?(configset, :client_id)
+  end
 
   defp get_config() do
     Application.get_env(:azure_ad_openid, AzureADOpenId)
   end
 
   @doc """
-  Returns a human readable user name from an `t:id_token/0`. This is useful as the 
+  Returns a human readable user name from an `t:id_token/0`. This is useful as the
   Azure Active Directory `t:id_token/0` can be very inconsistent in how user names are stored.
   """
   @spec get_user_name(id_token) :: String.t
   def get_user_name(token) do
     cond do
       token[:family_name] && token[:given_name] ->
-        name = token[:given_name] <> " " <> token[:family_name] 
+        name = token[:given_name] <> " " <> token[:family_name]
         format_name(name)
       token[:upn] -> format_name(token[:upn])
       token[:name] -> format_name(token[:name])

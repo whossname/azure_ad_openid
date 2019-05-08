@@ -1,6 +1,6 @@
 defmodule AzureADOpenId.Callback do
   @moduledoc """
-  Provides the callback functions for Azure Active directory Oauth. 
+  Provides the callback functions for Azure Active directory Oauth.
   The public keys from the Microsoft openid configuration are fetched, and the appropriate key is
   selected using the x5t value from the returned token header. The public key is used to verify the
   token and then the returned code is used to verify the claims on the token.
@@ -60,6 +60,7 @@ defmodule AzureADOpenId.Callback do
     url
     |> http_request!
     |> Jason.decode!
+    |> IO.inspect()
     |> Map.get("keys")
     |> Enum.filter(fn(key) -> key["x5t"] === x5t end)
     |> List.first

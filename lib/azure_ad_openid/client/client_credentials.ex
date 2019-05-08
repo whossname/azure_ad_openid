@@ -1,4 +1,4 @@
-defmodule AzureADOpenId.Client do
+defmodule AzureADOpenId.Client.ClientCredentials do
   @moduledoc """
   Oauth2 client for Azure Active Directory.
   """
@@ -23,7 +23,7 @@ defmodule AzureADOpenId.Client do
   end
 
   def authorize_url(client, params) do
-    Strategy.AuthCode.authorize_url(client, params)
+    Strategy.ClientCredentials.authorize_url(client, params)
   end
 
   defp build_client(callback_url, config) do
