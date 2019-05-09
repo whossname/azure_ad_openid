@@ -1,4 +1,4 @@
-defmodule AzureADOpenId.Client.ClientCredentials do
+defmodule AzureADOpenId.Strategy.ClientCredentials do
   @moduledoc """
   Oauth2 client credentials strategy for Azure Active Directory.
   """

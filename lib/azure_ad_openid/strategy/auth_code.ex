@@ -1,4 +1,4 @@
-defmodule AzureADOpenId.Client.AuthCode do
+defmodule AzureADOpenId.Strategy.AuthCode do
   @moduledoc """
   Oauth2 auth code strategy for Azure Active Directory.
   """

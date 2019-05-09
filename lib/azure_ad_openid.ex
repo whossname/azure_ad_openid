@@ -3,7 +3,7 @@ defmodule AzureADOpenId do
   Azure Active Directory authentication using OpenID.
   """
 
-  alias AzureADOpenId.Client
+  alias AzureADOpenId.Strategy
   alias AzureADOpenId.Callback
 
   @type uri :: String.t
@@ -13,13 +13,23 @@ defmodule AzureADOpenId do
   @type callback_response :: {:ok, id_token} | {:error, String.t, String.t}
   @type conn :: map() # Plug.Conn.t
 
+
+  @doc """
+  Get an access token using the client credentials authorisation strategy for
+  machine to machine authentication. Requires a client secret.
+  """
+  def get_access_token!(config) do
+    config = config || get_config()
+    Strategy.ClientCredentials.get_token!(config)
+  end
+
   @doc """
   Get a redirect url for authorization using Azure Active Directory login.
   """
   @spec authorize_url!(uri, config) :: uri
   def authorize_url!(redirect_uri, config \\ nil) do
     config = config || get_config()
-    Client.AuthCode.authorize_url!(redirect_uri, config)
+    Strategy.AuthCode.authorize_url!(redirect_uri, config)
   end
 
   @doc """
