@@ -18,9 +18,17 @@ defmodule AzureADOpenId do
   Get an access token using the client credentials authorisation strategy for
   machine to machine authentication. Requires a client secret.
   """
-  def get_access_token!(config) do
+  def get_access_token!(config \\ nil) do
     config = config || get_config()
     Strategy.ClientCredentials.get_token!(config)
+  end
+
+  @doc """
+  Verify an access token.
+  """
+  def verify_access_token!(access_token, config \\ nil) do
+    config = config || get_config()
+    Verify.Token.access_token!(access_token, config)
   end
 
   @doc """
