@@ -15,24 +15,8 @@ Azure Active Directory authentication using OpenID.
 This is a simple and opinionated OpenID authentication library for Azure Active Directory.
 The following decisions have been made:
 
-- The authorization response mode is "form_post"
-- The authorization response type is "code id_token"
 - The nonce has a timeout of 15 minutes
 - The callback will reject id_tokens with an iat that is more than 6 minutes old
-- The client secret is not used, so this library can't be used for authorization
-
-The callback function includes client side validations (found in `AzureADOpenId.VerifyClaims`)
-for the following id_token fields:
-- c_hash
-- aud
-- tid
-- iss
-- nbf
-- iat
-- exp
-- nonce
-
-Nonces are stored using an `Agent` called `AzureADOpenId.NonceStore`.
 
 ## Installation
 
@@ -41,34 +25,21 @@ The package can be installed by adding `azure_ad_openid` to your list of depende
 ```elixir
 def deps do
   [
-    {:azure_ad_openid, "~> 0.1"},
+    {:azure_ad_openid, "~> 0.2"},
   ]
 end
 ```
 
 ## Basic Usage
 
-In order to use this library you will need to first start the `AzureADOpenId.NonceStore`.
-It is a good idea to add it as a child to a supervisor. For example in a Phoenix app:
-
-```elixir
-def start(_type, _args) do
-  children = [
-    AzureADOpenId.NonceStore,
-    MyAppWeb.Endpoint,
-  ]
-  opts = [strategy: :one_for_one, name: MyApp.Supervisor]
-  Supervisor.start_link(children, opts)
-end
-```
-
 This library can be used with or without the standard Elixir configuration. If you want to
 use it with configuration set the following in your config files:
 
 ```elixir
 config :azure_ad_openid, AzureADOpenId,
+  tenant: <your tenant>,
   client_id: <your client_id>,
-  tenant: <your tenant>
+  client_secret: <> # only needed to generate access tokens
 ```
 
 If you don't setup the config, you will need to pass these values in manually at runtime.
@@ -124,4 +95,3 @@ The following repository was used as a base for the AzureAD authentication:
 
 Please see [LICENSE](https://github.com/whossname/azure_ad_openid/blob/master/LICENSE.md)
 for licensing details.
-

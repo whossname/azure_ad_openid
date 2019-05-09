@@ -2,11 +2,6 @@ defmodule NonceStoreTest do
   alias AzureADOpenId.NonceStore
   use ExUnit.Case
 
-  setup do
-    {:ok, nonce_store} = NonceStore.start_link([])
-    %{nonce_store: nonce_store}
-  end
-
   test "create and check nonce" do
     nonce = NonceStore.create_nonce(15000)
     assert NonceStore.check_nonce(nonce)
@@ -17,7 +12,7 @@ defmodule NonceStoreTest do
     nonce = SecureRandom.uuid
     assert !NonceStore.check_nonce(nonce)
   end
-  
+
   test "delete old nonce" do
     nonce = NonceStore.create_nonce(0)
     Process.sleep(1)

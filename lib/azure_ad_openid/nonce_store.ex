@@ -5,6 +5,10 @@ defmodule AzureADOpenId.NonceStore do
   use Agent
   @agent_name __MODULE__
 
+  def start(_, _) do
+    Agent.start_link(fn -> MapSet.new() end, name: @agent_name)
+  end
+
   def start_link(_) do
     Agent.start_link(fn -> MapSet.new() end, name: @agent_name)
   end

@@ -5,11 +5,6 @@ defmodule ClientCredentialsTest do
   alias AzureADOpenId.Strategy.AuthCode
   alias AzureADOpenId.Verify
 
-  setup do
-    {:ok, nonce_store} = NonceStore.start_link([])
-    %{nonce_store: nonce_store}
-  end
-
   @tag :requires_secret_config
   test "client credentials" do
     config = Application.get_env(:azure_ad_openid, AzureADOpenId)
