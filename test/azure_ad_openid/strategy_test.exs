@@ -2,6 +2,7 @@ defmodule ClientCredentialsTest do
   use ExUnit.Case
   alias AzureADOpenId.NonceStore
   alias AzureADOpenId.Strategy.ClientCredentials
+  alias AzureADOpenId.Strategy.AuthCode
   alias AzureADOpenId.Verify
 
   setup do
@@ -9,12 +10,21 @@ defmodule ClientCredentialsTest do
     %{nonce_store: nonce_store}
   end
 
-  test "get token" do
+  @tag :requires_secret_config
+  test "client credentials" do
     config = Application.get_env(:azure_ad_openid, AzureADOpenId)
 
-    access_token = ClientCredentials.get_token!(config)
-
-    access_token
+    config
+    |> ClientCredentials.get_token!()
     |> Verify.Token.access_token!(config)
+  end
+
+  @tag :requires_secret_config
+  test "auth code" do
+    config = Application.get_env(:azure_ad_openid, AzureADOpenId)
+
+    "http://website/callback"
+    |> AuthCode.authorize_url!(config)
+    |> IO.inspect()
   end
 end
