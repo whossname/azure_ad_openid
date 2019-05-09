@@ -8,8 +8,8 @@ defmodule CallbackTest do
   import Mock
 
   setup_with_mocks [
-    {NonceStore, [:passthrough], [check_nonce: fn nonce -> nonce == @test_data[:nonce] end ]},
-    {System, [:passthrough], [system_time: fn(:second) -> @test_data[:now] end ]}
+    {NonceStore, [:passthrough], [check_nonce: fn nonce -> nonce == @test_data[:nonce] end]},
+    {System, [:passthrough], [system_time: fn :second -> @test_data[:now] end]}
   ] do
     :ok
   end

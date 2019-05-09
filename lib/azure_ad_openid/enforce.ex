@@ -7,6 +7,7 @@ defmodule AzureADOpenId.Enforce do
   """
 
   def true!([], _), do: true
+
   def true!([{head, condition_name} | rest], error) do
     true!(head, error <> condition_name)
     true!(rest, error)
@@ -21,5 +22,5 @@ defmodule AzureADOpenId.Enforce do
   end
 
   def ok!({:ok, value}, _), do: value
-  def ok!(_, error), do: raise error
+  def ok!(_, error), do: raise(error)
 end

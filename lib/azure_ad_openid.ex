@@ -6,13 +6,14 @@ defmodule AzureADOpenId do
   alias AzureADOpenId.Strategy
   alias AzureADOpenId.Verify
 
-  @type uri :: String.t
-  @type config_values :: {:tenant, String.t} | {:client_id, String.t}
+  @type uri :: String.t()
+  @type config_values :: {:tenant, String.t()} | {:client_id, String.t()}
   @type config :: nil | [config_values]
   @type id_token :: map()
-  @type callback_response :: {:ok, id_token} | {:error, String.t, String.t}
-  @type conn :: map() # Plug.Conn.t
+  @type callback_response :: {:ok, id_token} | {:error, String.t(), String.t()}
 
+  # Plug.Conn.t
+  @type conn :: map()
 
   @doc """
   Get an access token using the client credentials authorisation strategy for
@@ -51,8 +52,10 @@ defmodule AzureADOpenId do
     case Map.get(conn, :params) do
       %{"id_token" => id_token, "code" => code} ->
         get_claims(id_token, code, config)
+
       %{"error" => error, "error_description" => error_description} ->
         {:error, error, error_description}
+
       _ ->
         {:error, "missing_code_or_token", "Missing code or id_token"}
     end
@@ -103,9 +106,10 @@ defmodule AzureADOpenId do
   @spec configured?() :: boolean()
   def configured?() do
     configset = get_config()
-    configset != nil
-    && Keyword.has_key?(configset, :tenant)
-    && Keyword.has_key?(configset, :client_id)
+
+    configset != nil &&
+      Keyword.has_key?(configset, :tenant) &&
+      Keyword.has_key?(configset, :client_id)
   end
 
   defp get_config() do
@@ -116,27 +120,35 @@ defmodule AzureADOpenId do
   Returns a human readable user name from an `t:id_token/0`. This is useful as the
   Azure Active Directory `t:id_token/0` can be very inconsistent in how user names are stored.
   """
-  @spec get_user_name(id_token) :: String.t
+  @spec get_user_name(id_token) :: String.t()
   def get_user_name(token) do
     cond do
       token[:family_name] && token[:given_name] ->
         name = token[:given_name] <> " " <> token[:family_name]
         format_name(name)
-      token[:upn] -> format_name(token[:upn])
-      token[:name] -> format_name(token[:name])
-      token[:email] -> format_name(token[:email])
-      true -> "No Name"
+
+      token[:upn] ->
+        format_name(token[:upn])
+
+      token[:name] ->
+        format_name(token[:name])
+
+      token[:email] ->
+        format_name(token[:email])
+
+      true ->
+        "No Name"
     end
   end
 
   defp format_name(name) do
     if should_format(name) do
       name
-        |> String.split(["@", "_"])
-        |> hd
-        |> String.split([".", " "])
-        |> Enum.map(&capitalize/1)
-        |> Enum.join(" ")
+      |> String.split(["@", "_"])
+      |> hd
+      |> String.split([".", " "])
+      |> Enum.map(&capitalize/1)
+      |> Enum.join(" ")
     else
       name
     end
@@ -157,8 +169,10 @@ defmodule AzureADOpenId do
     cond do
       String.contains?(name, [".", "@", "_"]) ->
         true
+
       has_upper?(name) ->
         false
+
       true ->
         true
     end

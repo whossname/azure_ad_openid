@@ -14,8 +14,6 @@ defmodule AzureADOpenId.Verify.Token do
     |> Claims.code_hash!(code)
     |> Claims.common!(config)
     |> Claims.id_token!(config)
-
-    claims
   end
 
   def access_token!(access_token, config) do
@@ -24,8 +22,6 @@ defmodule AzureADOpenId.Verify.Token do
     claims
     |> Claims.common!(config)
     |> Claims.access_token!(config)
-
-    claims
   end
 
   defp verify_token(token) do

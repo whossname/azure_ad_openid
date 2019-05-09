@@ -7,9 +7,10 @@ defmodule AzureADOpenId.Strategy.AuthCode do
   alias OAuth2.Strategy.AuthCode
   alias AzureADOpenId.NonceStore
 
-  @timeout 15 * 60 * 1000 # 15 minutes
+  # 15 minutes
+  @timeout 15 * 60 * 1000
 
-  @spec authorize_url!(String.t, Keyword.t) :: String.t
+  @spec authorize_url!(String.t(), Keyword.t()) :: String.t()
   def authorize_url!(callback_url, config) do
     params = [
       response_mode: "form_post",
@@ -25,12 +26,12 @@ defmodule AzureADOpenId.Strategy.AuthCode do
   defp build_client(callback_url, config) do
     azure_base_url = "https://login.microsoftonline.com/#{config[:tenant]}/oauth2"
 
-    Client.new([
+    Client.new(
       strategy: AuthCode,
       client_id: config[:client_id],
       redirect_uri: callback_url,
       authorize_url: "#{azure_base_url}/authorize",
       token_url: "#{azure_base_url}/token"
-    ])
+    )
   end
 end

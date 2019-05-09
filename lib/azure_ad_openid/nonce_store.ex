@@ -6,17 +6,17 @@ defmodule AzureADOpenId.NonceStore do
   @agent_name __MODULE__
 
   def start_link(_) do
-    Agent.start_link(fn -> MapSet.new end, name: @agent_name)
+    Agent.start_link(fn -> MapSet.new() end, name: @agent_name)
   end
 
   def create_nonce(timeout) do
     # create nonce
-    nonce = SecureRandom.uuid
+    nonce = SecureRandom.uuid()
     Agent.update(@agent_name, &MapSet.put(&1, nonce))
 
     # set cleanup task
     if(timeout != :infinity) do
-      Task.start(fn () -> cleanup(nonce, timeout) end)
+      Task.start(fn -> cleanup(nonce, timeout) end)
     end
 
     nonce

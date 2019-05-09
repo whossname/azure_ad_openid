@@ -55,7 +55,7 @@ defmodule AzureADOpenId.Verify.Claims do
     Enforce.true!(
       [
         # audience
-        {expected_appid == claims[:appid], "appid"},
+        {expected_appid == claims[:appid], "appid"}
       ],
       "Invalid claim: "
     )
