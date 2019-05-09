@@ -1,10 +1,10 @@
 defmodule AzureADOpenId.Client.ClientCredentials do
   @moduledoc """
-  Oauth2 client for Azure Active Directory.
+  Oauth2 client credentials strategy for Azure Active Directory.
   """
 
   alias OAuth2.Client
-  alias OAuth2.Strategy
+  alias OAuth2.Strategy.ClientCredentials
 
   def get_token!(config) do
     resp =
@@ -19,7 +19,7 @@ defmodule AzureADOpenId.Client.ClientCredentials do
     azure_base_url = "https://login.microsoftonline.com/#{config[:tenant]}/oauth2"
 
     Client.new(
-      strategy: Strategy.ClientCredentials,
+      strategy: ClientCredentials,
       client_id: config[:client_id],
       client_secret: config[:client_secret],
       token_url: "#{azure_base_url}/token"

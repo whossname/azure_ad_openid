@@ -1,10 +1,10 @@
 defmodule AzureADOpenId.Client.AuthCode do
   @moduledoc """
-  Oauth2 client for Azure Active Directory.
+  Oauth2 auth code strategy for Azure Active Directory.
   """
 
   alias OAuth2.Client
-  alias OAuth2.Strategy
+  alias OAuth2.Strategy.AuthCode
   alias AzureADOpenId.NonceStore
 
   @timeout 15 * 60 * 1000 # 15 minutes
@@ -22,15 +22,11 @@ defmodule AzureADOpenId.Client.AuthCode do
     |> Client.authorize_url!(params)
   end
 
-  def authorize_url(client, params) do
-    Strategy.AuthCode.authorize_url(client, params)
-  end
-
   defp build_client(callback_url, config) do
     azure_base_url = "https://login.microsoftonline.com/#{config[:tenant]}/oauth2"
 
     Client.new([
-      strategy: __MODULE__,
+      strategy: AuthCode,
       client_id: config[:client_id],
       redirect_uri: callback_url,
       authorize_url: "#{azure_base_url}/authorize",
