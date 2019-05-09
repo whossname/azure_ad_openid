@@ -14,7 +14,8 @@ defmodule CallbackTest do
     :ok
   end
 
-  @tag :requires_secret_config
+  # requires a current public token
+  @tag :skip
   test "callback" do
     config = Application.get_env(:azure_ad_openid, AzureADOpenId)
     id_token = @test_data[:id_token]
