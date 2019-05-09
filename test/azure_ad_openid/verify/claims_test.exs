@@ -1,5 +1,5 @@
 defmodule VerifyTest do
-  alias AzureADOpenId.VerifyClaims
+  alias AzureADOpenId.Verify.Claims
   alias AzureADOpenId.NonceStore
   use ExUnit.Case
 
@@ -9,12 +9,10 @@ defmodule VerifyTest do
   @client_id "example_client"
   @tenant "example_tenant"
   @nonce "example_nonce"
-  @env_values [redirect_uri: "https://example.com",
-    client_id: @client_id,
-    tenant: @tenant]
+  @env_values [redirect_uri: "https://example.com", client_id: @client_id, tenant: @tenant]
 
   setup_with_mocks [
-    {NonceStore, [:passthrough], [check_nonce: fn nonce -> nonce == @nonce end ]}
+    {NonceStore, [:passthrough], [check_nonce: fn nonce -> nonce == @nonce end]}
   ] do
     :ok
   end
@@ -36,13 +34,16 @@ defmodule VerifyTest do
       nonce: @nonce,
       aud: @client_id,
       tid: @tenant,
-      iss: "https://sts.windows.net/#{@tenant}/", 
+      iss: "https://sts.windows.net/#{@tenant}/"
     }
   end
 
   def assert_error(claims, msg) do
     try do
-      VerifyClaims.verify!(claims, @code, @env_values)
+      claims
+      |> Claims.code_hash!(@code)
+      |> Claims.id_token!(@env_values)
+      |> Claims.common!(@env_values)
     rescue
       e -> assert e.message == msg
     else
@@ -52,12 +53,18 @@ defmodule VerifyTest do
 
   test "verify claims - valid" do
     claims = build_claims()
-    claims_out = VerifyClaims.verify!(claims, @code, @env_values)
+
+    claims_out =
+      claims
+      |> Claims.code_hash!(@code)
+      |> Claims.id_token!(@env_values)
+
     assert claims_out == claims
   end
 
   test "verify claims - bad c_hash" do
     bad_code = "1123456789abcdef"
+
     bad_hash =
       :crypto.hash(:sha256, bad_code)
       |> Base.url_encode64()

@@ -4,7 +4,7 @@ defmodule AzureADOpenId do
   """
 
   alias AzureADOpenId.Strategy
-  alias AzureADOpenId.Callback
+  alias AzureADOpenId.Verify
 
   @type uri :: String.t
   @type config_values :: {:tenant, String.t} | {:client_id, String.t}
@@ -52,7 +52,7 @@ defmodule AzureADOpenId do
 
   defp get_claims(id_token, code, config) do
     try do
-      claims = Callback.process_callback!(id_token, code, config)
+      claims = Verify.Token.id_token!(id_token, code, config)
       {:ok, claims}
     rescue
       error in RuntimeError ->

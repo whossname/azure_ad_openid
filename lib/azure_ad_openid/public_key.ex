@@ -1,4 +1,10 @@
 defmodule AzureADOpenId.PublicKey do
+  @moduledoc """
+  Provides public key access for Azure Active directory Oauth.
+  The public keys from the Microsoft openid configuration are fetched from the configuration
+  endpoint. The appropriate key is selected using the x5t value from a token header.
+  """
+
   alias JsonWebToken.Algorithm.RsaUtil
   alias AzureADOpenId.Enforce
 
@@ -42,7 +48,7 @@ defmodule AzureADOpenId.PublicKey do
     |> http_request!
     |> Jason.decode!()
     |> Map.get("keys")
-    |> Enum.filter(fn key -> key["x5t"] === x5t end)
+    |> Enum.filter(fn key -> key["x5t"] == x5t end)
     |> List.first()
     |> Map.get("x5c")
   end
