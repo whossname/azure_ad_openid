@@ -51,7 +51,7 @@ defmodule AzureADOpenId do
 
     case Map.get(conn, :params) do
       %{"id_token" => id_token, "code" => code} ->
-        get_claims(id_token, code, config)
+        verify_id_token(id_token, code, config)
 
       %{"error" => error, "error_description" => error_description} ->
         {:error, error, error_description}
@@ -61,7 +61,7 @@ defmodule AzureADOpenId do
     end
   end
 
-  defp get_claims(id_token, code, config) do
+  defp verify_id_token(id_token, code, config) do
     try do
       claims = Verify.Token.id_token!(id_token, code, config)
       {:ok, claims}
