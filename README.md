@@ -1,14 +1,8 @@
 # Azure Active Directory OpenID
 
-[![Build Status]
- (https://travis-ci.org/whossname/azure_ad_openid.svg?branch=master)]
- (https://travis-ci.org/whossname/azure_ad_openid)
-[![Hex Version]
- (https://img.shields.io/hexpm/v/azure_ad_openid.svg)]
- (https://hex.pm/packages/azure_ad_openid)
-[![License]
- (http://img.shields.io/badge/license-MIT-brightgreen.svg)]
- (http://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/whossname/azure_ad_openid.svg?branch=master)](https://travis-ci.org/whossname/azure_ad_openid)
+[![Hex Version](https://img.shields.io/hexpm/v/azure_ad_openid.svg)](https://hex.pm/packages/azure_ad_openid)
+[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
 
 Azure Active Directory authentication using OpenID.
