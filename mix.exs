@@ -57,7 +57,7 @@ defmodule AzureAdOpenid.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:oauth2, "~> 0.9.2"},
+      {:oauth2, "~> 2.0"},
       {:json_web_token, "~> 0.2.5"},
       {:jason, "~> 1.1"},
       {:secure_random, "~> 0.5"},
@@ -65,10 +65,10 @@ defmodule AzureAdOpenid.MixProject do
 
       # tools
       {:mock, "~> 0.3.3", only: :test},
-      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
+      {:mix_test_watch, "~> 1.1", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
     ]
   end
 end
