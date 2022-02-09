@@ -20,6 +20,5 @@ defmodule ClientCredentialsTest do
 
     "http://website/callback"
     |> AuthCode.authorize_url!(config)
-    |> IO.inspect()
   end
 end

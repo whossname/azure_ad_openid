@@ -1,6 +1,6 @@
 defmodule AzureAdOpenid.MixProject do
   use Mix.Project
-  @version "0.2.0"
+  @version "0.3.1"
   @url "https://github.com/whossname/azure_ad_openid"
   @maintainers ["Tyson Buzza"]
 
@@ -8,7 +8,6 @@ defmodule AzureAdOpenid.MixProject do
     [
       app: :azure_ad_openid,
       version: @version,
-      elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       name: "Azure Active Directory OpenID",
@@ -18,13 +17,12 @@ defmodule AzureAdOpenid.MixProject do
       package: package(),
       deps: deps(),
       docs: docs(),
-
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
-        "coveralls.html": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -58,7 +56,8 @@ defmodule AzureAdOpenid.MixProject do
   defp deps do
     [
       {:oauth2, "~> 2.0"},
-      {:json_web_token, "~> 0.2.5"},
+      {:json_web_token,
+       git: "https://github.com/PatrickSachs/json_web_token_ex", ref: "0c87b1e8ec2e383cb79b4450191c164c9a1a677c"},
       {:jason, "~> 1.1"},
       {:secure_random, "~> 0.5"},
       {:httpoison, "~> 1.2"},
@@ -68,7 +67,7 @@ defmodule AzureAdOpenid.MixProject do
       {:mix_test_watch, "~> 1.1", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false}
     ]
   end
 end
