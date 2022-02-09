@@ -56,8 +56,7 @@ defmodule AzureAdOpenid.MixProject do
   defp deps do
     [
       {:oauth2, "~> 2.0"},
-      {:json_web_token,
-       git: "https://github.com/PatrickSachs/json_web_token_ex", ref: "0c87b1e8ec2e383cb79b4450191c164c9a1a677c"},
+      {:yajwt, "~> 1.4"},
       {:jason, "~> 1.1"},
       {:secure_random, "~> 0.5"},
       {:httpoison, "~> 1.2"},

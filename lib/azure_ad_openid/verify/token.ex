@@ -31,7 +31,7 @@ defmodule AzureADOpenId.Verify.Token do
     }
 
     token
-    |> JsonWebToken.verify(opts)
+    |> JWT.verify(opts)
     |> Enforce.ok!("JWT verification failed")
   end
 end

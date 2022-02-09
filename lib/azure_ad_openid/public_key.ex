@@ -5,7 +5,7 @@ defmodule AzureADOpenId.PublicKey do
   endpoint. The appropriate key is selected using the x5t value from a token header.
   """
 
-  alias JsonWebToken.Algorithm.RsaUtil
+  alias JWT.Algorithm.RsaUtil
   alias AzureADOpenId.Enforce
 
   def from_token(token) do
