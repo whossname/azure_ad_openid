@@ -13,7 +13,7 @@ defmodule AzureADOpenId.Verify.Claims do
     hash_actual = :crypto.hash(:sha256, code)
 
     hash_expected =
-      claims[:c_hash]
+      claims["c_hash"]
       |> Base.url_decode64(padding: false)
       |> Enforce.ok!("Failed to decode c_hash")
 
@@ -37,9 +37,9 @@ defmodule AzureADOpenId.Verify.Claims do
     Enforce.true!(
       [
         # audience
-        {expected_aud == claims[:aud], "aud"},
+        {expected_aud == claims["aud"], "aud"},
         # nonce
-        {NonceStore.check_nonce(claims[:nonce]), "nonce"}
+        {NonceStore.check_nonce(claims["nonce"]), "nonce"}
       ],
       "Invalid claim: "
     )
@@ -54,8 +54,8 @@ defmodule AzureADOpenId.Verify.Claims do
 
     Enforce.true!(
       [
-        # audience
-        {expected_appid == claims[:appid], "appid"}
+        # appid
+        {expected_appid == claims["appid"], "appid"}
       ],
       "Invalid claim: "
     )
@@ -71,14 +71,14 @@ defmodule AzureADOpenId.Verify.Claims do
     Enforce.true!(
       [
         # tenant/issuer
-        {expected_iss == claims[:iss], "iss"},
-        {expected_tid == claims[:tid], "tid"},
+        {expected_iss == claims["iss"], "iss"},
+        {expected_tid == claims["tid"], "tid"},
 
         # time checks
-        {now < claims[:exp], "exp"},
-        {now >= claims[:nbf], "nbf"},
-        {now >= claims[:iat], "iat"},
-        {now <= claims[:iat] + iat_timeout, "iat"}
+        {now < claims["exp"], "exp"},
+        {now >= claims["nbf"], "nbf"},
+        {now >= claims["iat"], "iat"},
+        {now <= claims["iat"] + iat_timeout, "iat"}
       ],
       "Invalid claim: "
     )

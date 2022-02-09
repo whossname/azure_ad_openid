@@ -8,9 +8,9 @@ defmodule AzureADOpenId.Strategy.ClientCredentials do
 
   def get_token!(config) do
     resp =
-    config
-    |> build_client()
-    |> OAuth2.Client.get_token!()
+      config
+      |> build_client()
+      |> OAuth2.Client.get_token!()
 
     resp.token.access_token
   end

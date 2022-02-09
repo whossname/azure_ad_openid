@@ -1,6 +1,5 @@
 defmodule ClientCredentialsTest do
   use ExUnit.Case
-  alias AzureADOpenId.NonceStore
   alias AzureADOpenId.Strategy.ClientCredentials
   alias AzureADOpenId.Strategy.AuthCode
   alias AzureADOpenId.Verify
@@ -11,6 +10,7 @@ defmodule ClientCredentialsTest do
 
     config
     |> ClientCredentials.get_token!()
+    |> Jason.decode!()
     |> Verify.Token.access_token!(config)
   end
 
