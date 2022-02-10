@@ -34,7 +34,8 @@ use it with configuration set the following in your config files:
 config :azure_ad_openid, AzureADOpenId,
   tenant: <your tenant>,
   client_id: <your client_id>,
-  client_secret: <> # only needed to generate access tokens
+  client_secret: <>, # only needed to generate access tokens
+  aud: <> # used to overide client_id as the value for aud
 ```
 
 If you don't setup the config, you will need to pass these values in manually at runtime.
