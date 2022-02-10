@@ -123,18 +123,18 @@ defmodule AzureADOpenId do
   @spec get_user_name(id_token) :: String.t()
   def get_user_name(token) do
     cond do
-      token[:family_name] && token[:given_name] ->
-        name = token[:given_name] <> " " <> token[:family_name]
+      token["family_name"] && token["given_name"] ->
+        name = token["given_name"] <> " " <> token["family_name"]
         format_name(name)
 
-      token[:upn] ->
-        format_name(token[:upn])
+      token["upn"] ->
+        format_name(token["upn"])
 
-      token[:name] ->
-        format_name(token[:name])
+      token["name"] ->
+        format_name(token["name"])
 
-      token[:email] ->
-        format_name(token[:email])
+      token["email"] ->
+        format_name(token["email"])
 
       true ->
         "No Name"
