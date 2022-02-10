@@ -28,9 +28,11 @@ defmodule AzureADOpenId.Verify.Token do
   end
 
   defp verify_token(token, config) do
+    aud = config[:aud] || config[:client_id] || "00000002-0000-0000-c000-000000000000"
+
     opts = %{
       alg: "RS256",
-      aud: config[:aud] || "00000002-0000-0000-c000-000000000000",
+      aud: aud,
       key: PublicKey.from_token(token),
       iss: "https://sts.windows.net/#{config[:tenant]}/"
     }
