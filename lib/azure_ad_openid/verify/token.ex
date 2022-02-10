@@ -28,7 +28,13 @@ defmodule AzureADOpenId.Verify.Token do
   end
 
   defp verify_token(token, config) do
-    aud = config[:aud] || config[:client_id] || "00000002-0000-0000-c000-000000000000"
+    config
+    |> IO.inspect()
+
+    aud =
+      config[:aud] || config[:client_id] ||
+        "00000002-0000-0000-c000-000000000000"
+        |> IO.inspect()
 
     opts = %{
       alg: "RS256",
