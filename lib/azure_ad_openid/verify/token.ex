@@ -7,7 +7,8 @@ defmodule AzureADOpenId.Verify.Token do
   alias AzureADOpenId.Verify.Claims
 
   def id_token!(id_token, code, config) do
-    claims = verify_token(id_token, config)
+    aud = config[:aud] || config[:client_id]
+    claims = verify_token(id_token, config, aud)
 
     claims
     |> Claims.code_hash!(code)
@@ -20,15 +21,16 @@ defmodule AzureADOpenId.Verify.Token do
   end
 
   def access_token!(access_token, config) do
-    claims = verify_token(access_token, config)
+    aud = config[:aud]
+    claims = verify_token(access_token, config, aud)
 
     claims
     |> Claims.common!(config)
     |> Claims.access_token!(config)
   end
 
-  defp verify_token(token, config) do
-    aud = config[:aud] || config[:client_id] || "00000002-0000-0000-c000-000000000000"
+  defp verify_token(token, config, aud) do
+    aud = aud || "00000002-0000-0000-c000-000000000000"
 
     opts = %{
       alg: "RS256",
